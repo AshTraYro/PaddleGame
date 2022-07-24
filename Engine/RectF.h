@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Vec2.h"
-#include "Colors.h"
-#include "Graphics.h"
 
 class RectF
 {
@@ -14,9 +12,9 @@ public:
 public:
 	RectF() = default;
 	RectF(float left_in, float right_in, float top_in, float bottom_in);
-	RectF(Vec2& topLeft, Vec2& rightBottom);
-	RectF(Vec2& topLeft, float width, float height);
-	static RectF FromCenter(Vec2& center, float halfWidth, float halfHeight);
+	RectF(const Vec2& topLeft, const Vec2& rightBottom);
+	RectF(const Vec2& topLeft, float width, float height);
+	static RectF FromCenter(const Vec2& center, float halfWidth, float halfHeight);
 	bool const IsOverlappingWith(const RectF& other);
 
 
