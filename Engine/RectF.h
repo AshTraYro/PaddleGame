@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vec2.h"
+#include "Colors.h"
+#include "Graphics.h"
 
 class RectF
 {
