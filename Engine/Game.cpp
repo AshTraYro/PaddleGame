@@ -20,11 +20,15 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "Ball.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	ball(Vec2(400.0f,500.0f), Vec2(0.0f, 0.0f))
+
+
 {
 }
 
@@ -42,4 +46,5 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	ball.Draw(gfx);
 }
