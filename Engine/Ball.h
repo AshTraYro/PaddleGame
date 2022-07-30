@@ -15,5 +15,6 @@ public:
 	void ReboundX();
 	void ReboundY();
 	RectF GetRect();
+	Vec2 GetVelocity();
 };
 
