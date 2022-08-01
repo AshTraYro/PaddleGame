@@ -40,8 +40,23 @@ bool Paddle::DoBallCollission(Ball& ball)
 {
 	if (ball.GetVelocity().y>0 && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
-		ball.ReboundY();
-		return true;
+		if (ball.GetBallCenter().x - pos.x > 0 && ball.GetVelocity().x<0)
+		{
+			ball.ReboundX();
+			ball.ReboundY();
+			return true;
+		}
+		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x > 0)
+		{
+			ball.ReboundX();
+			ball.ReboundY();
+			return true;
+		}
+		else
+		{
+			ball.ReboundY();
+			return true;
+		}
 	}
 	else
 	{

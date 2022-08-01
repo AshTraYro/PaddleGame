@@ -18,10 +18,20 @@ void Brick::Draw(Graphics& gfx)
 bool Brick::DoBallCollision(Ball& ball)
 {
 	if (!destroyed && rect.IsOverlappingWith(ball.GetRect()))
+
 	{
-		ball.ReboundY();
-		destroyed = true;
-		return true;
+		if (ball.GetBallCenter().x > rect.left && ball.GetBallCenter().x < rect.right)
+		{
+			ball.ReboundY();
+			destroyed = true;
+			return true;
+		}
+		else
+		{
+			ball.ReboundX();
+			destroyed = true;
+			return true;
+		}
 	}
 
 	else

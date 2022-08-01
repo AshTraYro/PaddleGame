@@ -40,3 +40,8 @@ RectF RectF::GetExpanded(float offset)
 {
     return RectF(left-offset,right+offset,top-offset,bottom+offset);
 }
+
+Vec2 RectF::GetRectCenter()
+{
+    return Vec2((left+right)/2.0f,(top+bottom)/2.0f);
+}
