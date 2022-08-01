@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(400.0f,500.0f), Vec2(300.0f, -300.0f)),
+	ball(Vec2(300.0f,300.0f), Vec2(-300.0f, -300.0f)),
 	walls(0.0f,float(gfx.ScreenWidth),0.0f,float(gfx.ScreenHeight)),
 	pad(Vec2(400.0f,550),70.0f,5.0f),
 	soundPad(L"Sounds\\arkpad.wav"),
@@ -33,8 +33,8 @@ Game::Game( MainWindow& wnd )
 
 
 {
-	Color bricksColor[int(nBrickRows)] = { Colors::Blue,Colors::Green,Colors::Yellow };
-	Vec2 topLeft = Vec2(25.0f, 100.0f);
+	Color bricksColor[nBrickRows] = { Colors::Blue,Colors::Green,Colors::Yellow,Colors::Magenta };
+	Vec2 topLeft = Vec2(40.0f, 40.0f);
 	int i = 0;
 	for (int y = 0; y < nBrickRows; y++)
 	{
@@ -72,13 +72,36 @@ void Game::UpdateModel()
 	{
 		soundPad.Play();
 	}
-	for (Brick& b : bricks)
+	bool collisionHappend = false;
+	float DistFromBallCenterToBrickCenterSq;
+	int curIndexOfBrickToCollide;
+	
+	for (int i=0;i<nBricks;i++)
 	{
-		if (b.DoBallCollision(ball))
+		if (bricks[i].CheckBallCollision(ball))
 		{
-			soundBrick.Play();
-			break;
+			if (collisionHappend)
+			{
+				float newDistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
+				if (newDistFromBallCenterToBrickCenterSq < DistFromBallCenterToBrickCenterSq)
+				{
+					DistFromBallCenterToBrickCenterSq = newDistFromBallCenterToBrickCenterSq;
+					curIndexOfBrickToCollide = i;
+				}
+			}
+			else
+			{
+				DistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
+				curIndexOfBrickToCollide = i;
+				collisionHappend = true;
+			}
 		}
+	}
+
+	if (collisionHappend)
+	{
+		bricks[curIndexOfBrickToCollide].ExecuteBallCollision(ball);
+		soundBrick.Play();
 	}
 }
 

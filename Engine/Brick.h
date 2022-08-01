@@ -15,5 +15,7 @@ public:
 	Brick() = default;
 	Brick(RectF& rect_in, Color color_in);
 	void Draw(Graphics& gfx);
-	bool DoBallCollision(Ball& ball);
+	bool CheckBallCollision(Ball& ball);
+	void ExecuteBallCollision(Ball& ball);
+	Vec2 GetBrickCenter();
 };

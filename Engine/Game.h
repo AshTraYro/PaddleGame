@@ -47,11 +47,11 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	static constexpr float nBrickColumns = 15.0f;
-	static constexpr float nBrickRows = 3.0f;
-	static constexpr float nBricks = nBrickColumns * nBrickRows;
-	static constexpr float brickWidth = 50.0f;
-	static constexpr float brickHeight = 30.0f;
+	static constexpr int nBrickColumns = 18;
+	static constexpr int nBrickRows = 4;
+	static constexpr int nBricks = nBrickColumns * nBrickRows;
+	static constexpr float brickWidth = 40.0f;
+	static constexpr float brickHeight = 24.0f;
 	Ball ball;
 	FrameTimer ft;
 	RectF walls;
