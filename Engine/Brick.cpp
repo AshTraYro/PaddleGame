@@ -29,7 +29,7 @@ void Brick::ExecuteBallCollision(Ball& ball)
 		{
 			ball.ReboundY();
 		}
-		else if (ball.GetBallCenter().x > rect.left && ball.GetBallCenter().x < rect.right)
+		else if (ball.GetBallCenter().x >= rect.left && ball.GetBallCenter().x <= rect.right)
 		{
 			ball.ReboundY();		
 		}
