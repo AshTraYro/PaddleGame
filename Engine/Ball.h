@@ -17,5 +17,6 @@ public:
 	RectF GetRect();
 	Vec2 GetVelocity();
 	Vec2 GetBallCenter();
+	void UpdateVelocityX(float vel_x);
 };
 
