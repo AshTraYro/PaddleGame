@@ -44,53 +44,17 @@ bool Paddle::DoBallCollission(Ball& ball)
 		{
 			ball.ReboundX();
 			ball.ReboundY();
-			if (ball.GetBallCenter().y == pos.y)
-			{
-				ball.UpdateVelocityX(0);
-			}
-			else
-			{
-				Vec2 vect = ball.GetBallCenter() + (ball.GetBallCenter() - pos);
-				ball.UpdateVelocityX(abs(vect.x * ball.GetVelocity().y / vect.y));
-			}
-			
 			return true;
 		}
 		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x > 0)
 		{
 			ball.ReboundX();
 			ball.ReboundY();
-			if (ball.GetBallCenter().y == pos.y)
-			{
-				ball.UpdateVelocityX(0);
-			}
-			else
-			{
-				Vec2 vect = ball.GetBallCenter() + (ball.GetBallCenter() - pos);
-				ball.UpdateVelocityX(-abs(vect.x * ball.GetVelocity().y / vect.y));
-			}
 			return true;
 		}
 		else
 		{
 			ball.ReboundY();
-			if (ball.GetBallCenter().y == pos.y)
-			{
-				ball.UpdateVelocityX(0);
-			}
-			else
-			{
-				if (ball.GetVelocity().x > 0)
-				{
-					Vec2 vect = ball.GetBallCenter() + (ball.GetBallCenter() - pos);
-					ball.UpdateVelocityX(abs(vect.x * ball.GetVelocity().y / vect.y));
-				}
-				else
-				{
-					Vec2 vect = ball.GetBallCenter() + (ball.GetBallCenter() - pos);
-					ball.UpdateVelocityX(-abs(vect.x * ball.GetVelocity().y / vect.y));
-				}
-			}
 			return true;
 		}
 	}
