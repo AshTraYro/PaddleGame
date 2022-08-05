@@ -76,3 +76,17 @@ Vec2 Ball::GetBallCenter()
 	return pos;
 }
 
+void Ball::UpdateVelocity(Vec2 vel_new)
+{
+	vel = vel_new;
+}
+
+void Ball::UpdateVelocityX(float vel_x)
+{
+	vel.x = vel_x;
+}
+
+void Ball::UpdateVelocityY(float vel_y)
+{
+	vel.y = vel_y;
+}

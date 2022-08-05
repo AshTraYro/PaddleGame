@@ -40,21 +40,50 @@ bool Paddle::DoBallCollission(Ball& ball)
 {
 	if (ball.GetVelocity().y>0 && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
-		if (ball.GetBallCenter().x - pos.x > 0 && ball.GetVelocity().x<0)
+		float ballVelocityValue = (ball.GetVelocity()).GetLength();
+		Vec2 FromPaddleToBall = ball.GetBallCenter() - pos; //Value of vector from center of the paddle to the center of the ball
+		float FromPaddleToBallValue = FromPaddleToBall.GetLength();
+		float newBallVelX = abs(ballVelocityValue * FromPaddleToBall.x / FromPaddleToBallValue);
+		float newBallVelY = abs(ballVelocityValue * FromPaddleToBall.y / FromPaddleToBallValue);
+		
+		if (ball.GetBallCenter().x - pos.x >= 0 && ball.GetVelocity().x<=0)
 		{
-			ball.ReboundX();
-			ball.ReboundY();
+			
+			if (ball.GetBallCenter().x == pos.x)
+			{
+				ball.UpdateVelocityX(0);
+				ball.UpdateVelocityY(-ballVelocityValue);
+			}
+			else
+			{
+				ball.UpdateVelocityX(newBallVelX);
+				ball.UpdateVelocityY(-newBallVelY);
+			}
+			
 			return true;
 		}
-		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x > 0)
+		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x >= 0)
 		{
-			ball.ReboundX();
-			ball.ReboundY();
+			
+			ball.UpdateVelocityX(-newBallVelX);
+			ball.UpdateVelocityY(-newBallVelY);
+			
 			return true;
 		}
-		else
+		else if (ball.GetBallCenter().x - pos.x > 0 && ball.GetVelocity().x >= 0)
 		{
-			ball.ReboundY();
+
+				ball.UpdateVelocityX(newBallVelX);
+				ball.UpdateVelocityY(-newBallVelY);
+
+			return true;
+		}
+		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x <= 0)
+		{
+
+			ball.UpdateVelocityX(-newBallVelX);
+			ball.UpdateVelocityY(-newBallVelY);
+
 			return true;
 		}
 	}
