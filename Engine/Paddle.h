@@ -10,7 +10,7 @@ private:
 	Vec2 pos;
 	float halfWidth;
 	float halfHeight;
-	float speed=300.0f;
+	float speed=500.0f;
 	Color c = Colors::Green;
 	float wingWidth = 20.0f;
 	Color wingColor = Colors::Red;
