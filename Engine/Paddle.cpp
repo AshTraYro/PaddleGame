@@ -1,4 +1,5 @@
 #include "Paddle.h"
+#include "SpriteCodex.h"
 
 Paddle::Paddle(Vec2& pos_in, float halfWidth_in, float halfHeight_in)
 	:
@@ -16,11 +17,7 @@ RectF Paddle::GetRect()
 
 void Paddle::Draw(Graphics& gfx)
 {
-	RectF rect = GetRect();
-	gfx.DrawRect(rect, wingColor);
-	rect.left += wingWidth;
-	rect.right -= wingWidth;
-	gfx.DrawRect(rect, c);
+	SpriteCodex::DrawPaddle(pos, halfWidth, halfHeight, gfx);
 }
 
 void Paddle::Update(Keyboard& kbd, float dt)
@@ -38,59 +35,54 @@ void Paddle::Update(Keyboard& kbd, float dt)
 
 bool Paddle::DoBallCollission(Ball& ball)
 {
-	if (ball.GetVelocity().y>0 && GetRect().IsOverlappingWith(ball.GetRect()))
+
+	if (!isCoolDown)
 	{
-		float ballVelocityValue = (ball.GetVelocity()).GetLength();
-		Vec2 FromPaddleToBall = ball.GetBallCenter() - pos; //Value of vector from center of the paddle to the center of the ball
-		float FromPaddleToBallValue = FromPaddleToBall.GetLength();
-		float newBallVelX = abs(ballVelocityValue * FromPaddleToBall.x / FromPaddleToBallValue);
-		float newBallVelY = abs(ballVelocityValue * FromPaddleToBall.y / FromPaddleToBallValue);
-		
-		if (ball.GetBallCenter().x - pos.x >= 0 && ball.GetVelocity().x<=0)
+
+
+		if (ball.GetVelocity().y > 0 && GetRect().IsOverlappingWith(ball.GetRect()))
 		{
-			
-			if (ball.GetBallCenter().x == pos.x)
+			float ballVelocityValue = (ball.GetVelocity()).GetLength();
+			Vec2 FromPaddleToBall = ball.GetBallCenter() - (pos + Vec2(0.0f, 50.0f)); //vector from center of the paddle to the center of the ball
+			float FromPaddleToBallValue = FromPaddleToBall.GetLength();
+			float newBallVelX = abs(ballVelocityValue * FromPaddleToBall.x / FromPaddleToBallValue);
+			float newBallVelY = abs(ballVelocityValue * FromPaddleToBall.y / FromPaddleToBallValue);
+
+			if (ball.GetBallCenter().x - pos.x >= 0 && ball.GetVelocity().x <= 0)
 			{
-				ball.UpdateVelocityX(0);
-				ball.UpdateVelocityY(-ballVelocityValue);
+
+				if (ball.GetBallCenter().x == pos.x)
+				{
+					ball.UpdateVelocityX(0);
+					ball.UpdateVelocityY(-ballVelocityValue);
+				}
+				else
+				{
+					ball.UpdateVelocityX(newBallVelX);
+					ball.UpdateVelocityY(-newBallVelY);
+				}
 			}
-			else
+			if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x >= 0)
 			{
-				ball.UpdateVelocityX(newBallVelX);
+				ball.UpdateVelocityX(-newBallVelX);
 				ball.UpdateVelocityY(-newBallVelY);
 			}
-			
-			return true;
-		}
-		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x >= 0)
-		{
-			
-			ball.UpdateVelocityX(-newBallVelX);
-			ball.UpdateVelocityY(-newBallVelY);
-			
-			return true;
-		}
-		else if (ball.GetBallCenter().x - pos.x > 0 && ball.GetVelocity().x >= 0)
-		{
-
+			if (ball.GetBallCenter().x - pos.x > 0 && ball.GetVelocity().x >= 0)
+			{
 				ball.UpdateVelocityX(newBallVelX);
-				ball.UpdateVelocityY(-newBallVelY);
-
-			return true;
-		}
-		else if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x <= 0)
-		{
-
-			ball.UpdateVelocityX(-newBallVelX);
-			ball.UpdateVelocityY(-newBallVelY);
-
+				ball.UpdateVelocityY(-newBallVelY);			
+			}
+			if (ball.GetBallCenter().x - pos.x < 0 && ball.GetVelocity().x <= 0)
+			{
+				ball.UpdateVelocityX(-newBallVelX);
+				ball.UpdateVelocityY(-newBallVelY);			
+			}
+			isCoolDown = true;
 			return true;
 		}
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 void Paddle::DoWallCollission(RectF& walls)
@@ -105,4 +97,9 @@ void Paddle::DoWallCollission(RectF& walls)
 		pos.x -= rect.right - walls.right;
 	}
 
+}
+
+void Paddle::ResetCoolDown()
+{
+	isCoolDown = false;
 }

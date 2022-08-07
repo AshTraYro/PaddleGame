@@ -38,7 +38,7 @@ public:
 	void Go();
 private:
 	void ComposeFrame();
-	void UpdateModel();
+	void UpdateModel(float dt);
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -47,6 +47,12 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	static constexpr float wallThickness = 20;
+	static constexpr float wallPadding = 10;
+
+	RectF wallLeft;
+	RectF wallRight;
+	RectF wallTop;
 	static constexpr int nBrickColumns = 18;
 	static constexpr int nBrickRows = 4;
 	static constexpr int nBricks = nBrickColumns * nBrickRows;
@@ -54,7 +60,7 @@ private:
 	static constexpr float brickHeight = 24.0f;
 	Ball ball;
 	FrameTimer ft;
-	RectF walls;
+	RectF gameBoundry;
 	Paddle pad;
 	Sound soundPad;
 	Sound soundBrick;

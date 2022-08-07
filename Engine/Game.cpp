@@ -25,8 +25,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(300.0f,300.0f), Vec2(-500.0f, -500.0f)),
-	walls(0.0f,float(gfx.ScreenWidth),0.0f,float(gfx.ScreenHeight)),
+	ball(Vec2(400.0f,300.0f), Vec2(-300.0f, -300.0f)),
+	gameBoundry(0.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight)),
 	pad(Vec2(400.0f,550),70.0f,15.0f),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav")
@@ -43,33 +43,45 @@ Game::Game( MainWindow& wnd )
 		{
 			bricks[i] = Brick(RectF(Vec2(topLeft + Vec2(x * brickWidth, y * brickHeight)), brickWidth, brickHeight),c);
 			i++;
-		}
-		
-
+		}	
 	}
+
+	wallLeft = RectF(wallPadding, wallThickness+wallPadding, wallPadding, float(gfx.ScreenHeight-wallPadding));
+	wallRight = RectF(float(gfx.ScreenWidth) - wallThickness-wallPadding, float(gfx.ScreenWidth)-wallPadding, wallPadding, float(gfx.ScreenHeight)-wallPadding);
+	wallTop = RectF(wallThickness+wallPadding, float(gfx.ScreenWidth) - wallThickness-wallPadding, wallPadding, wallThickness+wallPadding);
+
 }
 
 void Game::Go()
 {
-	gfx.BeginFrame();	
-	UpdateModel();
+	gfx.BeginFrame();
+	float elapsedTime = ft.Mark();
+	while (elapsedTime > 0.0f)
+	{
+
+
+		const float dt = std::min(0.0025f, elapsedTime);
+		UpdateModel(dt);
+		elapsedTime -= dt;
+	}
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel(float dt)
 {
-	const float dt = ft.Mark();
+	
 	ball.Update(dt);
 	pad.Update(wnd.kbd, dt);
-	pad.DoWallCollission(walls);
+	pad.DoWallCollission(gameBoundry);
 	if (pad.DoBallCollission(ball))
 	{
 		soundPad.Play();
 	}
 
-	if (ball.DoWallCollission(walls))
+	if (ball.DoWallCollission(gameBoundry))
 	{
+		pad.ResetCoolDown();
 		soundPad.Play();
 	}
 	bool collisionHappend = false;
@@ -100,6 +112,7 @@ void Game::UpdateModel()
 
 	if (collisionHappend)
 	{
+		pad.ResetCoolDown();
 		bricks[curIndexOfBrickToCollide].ExecuteBallCollision(ball);
 		soundBrick.Play();
 	}
@@ -113,4 +126,7 @@ void Game::ComposeFrame()
 	{
 		b.Draw(gfx);
 	}
+	gfx.DrawRect(wallLeft, Colors::LightGray);
+	gfx.DrawRect(wallRight, Colors::LightGray);
+	gfx.DrawRect(wallTop, Colors::LightGray);
 }

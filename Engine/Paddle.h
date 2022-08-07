@@ -7,6 +7,7 @@
 class Paddle
 {
 private:
+	bool isCoolDown = false;
 	Vec2 pos;
 	float halfWidth;
 	float halfHeight;
@@ -21,4 +22,5 @@ public:
 	void Update(Keyboard& kbd, float dt);
 	bool DoBallCollission(Ball& ball);
 	void DoWallCollission(RectF& walls);
+	void ResetCoolDown();
 };
