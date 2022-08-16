@@ -7,6 +7,7 @@ private:
 	static constexpr float radius = 7.0f;
 	Vec2 pos;
 	Vec2 vel;
+	bool isGameOver = false;
 public:
 	Ball(Vec2& pos_in, Vec2& vel_in);
 	void Draw(Graphics& gfx) const;
@@ -20,5 +21,6 @@ public:
 	void UpdateVelocity(Vec2 vel_new);
 	void UpdateVelocityX(float vel_x);
 	void UpdateVelocityY(float vel_y);
+	bool GetGameStatus();
 };
 

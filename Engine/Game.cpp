@@ -20,21 +20,22 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "SpriteCodex.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
 	ball(Vec2(400.0f,300.0f), Vec2(-300.0f, -300.0f)),
-	gameBoundry(0.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight)),
+	gameBoundry(70.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding-70.0f,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight)),
 	pad(Vec2(400.0f,550),70.0f,15.0f),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav")
 
 
 {
-	Color bricksColor[nBrickRows] = { Colors::Blue,Colors::Green,Colors::Yellow,Colors::Magenta };
-	Vec2 topLeft = Vec2(40.0f, 40.0f);
+	Color bricksColor[nBrickRows] = { Colors::Red,Colors::Green,Colors::Yellow,Colors::Magenta};
+	Vec2 topLeft = Vec2(100.0f, 100.0f);
 	int i = 0;
 	for (int y = 0; y < nBrickRows; y++)
 	{
@@ -46,9 +47,10 @@ Game::Game( MainWindow& wnd )
 		}	
 	}
 
-	wallLeft = RectF(wallPadding, wallThickness+wallPadding, wallPadding, float(gfx.ScreenHeight-wallPadding));
-	wallRight = RectF(float(gfx.ScreenWidth) - wallThickness-wallPadding, float(gfx.ScreenWidth)-wallPadding, wallPadding, float(gfx.ScreenHeight)-wallPadding);
-	wallTop = RectF(wallThickness+wallPadding, float(gfx.ScreenWidth) - wallThickness-wallPadding, wallPadding, wallThickness+wallPadding);
+	wallLeft = RectF(70.0f+wallPadding, 70.0f+wallThickness+wallPadding, wallPadding, float(gfx.ScreenHeight));
+	wallRight = RectF(float(gfx.ScreenWidth) - wallThickness-wallPadding-70.0f, float(gfx.ScreenWidth)-wallPadding-70.0f, wallPadding, float(gfx.ScreenHeight));
+	wallTop = RectF(wallThickness+wallPadding+70.0f, float(gfx.ScreenWidth) - wallThickness-wallPadding-70.0f, wallPadding, wallThickness+wallPadding);
+	wallBottom = RectF(0.0f, float(gfx.ScreenWidth), float(gfx.ScreenHeight - 5), float(gfx.ScreenHeight));
 
 }
 
@@ -70,63 +72,81 @@ void Game::Go()
 
 void Game::UpdateModel(float dt)
 {
-	
-	ball.Update(dt);
-	pad.Update(wnd.kbd, dt);
-	pad.DoWallCollission(gameBoundry);
-	if (pad.DoBallCollission(ball))
+	if (isNotGameOver)
 	{
-		soundPad.Play();
-	}
 
-	if (ball.DoWallCollission(gameBoundry))
-	{
-		pad.ResetCoolDown();
-		soundPad.Play();
-	}
-	bool collisionHappend = false;
-	float DistFromBallCenterToBrickCenterSq;
-	int curIndexOfBrickToCollide;
-	
-	for (int i=0;i<nBricks;i++)
-	{
-		if (bricks[i].CheckBallCollision(ball))
+		ball.Update(dt);
+		pad.Update(wnd.kbd, dt);
+		pad.DoWallCollission(gameBoundry);
+		if (pad.DoBallCollission(ball))
 		{
-			if (collisionHappend)
+			soundPad.Play();
+		}
+
+		if (ball.DoWallCollission(gameBoundry) && !ball.GetGameStatus())
+		{
+			pad.ResetCoolDown();
+			soundPad.Play();
+		}
+
+		bool collisionHappend = false;
+		float DistFromBallCenterToBrickCenterSq;
+		int curIndexOfBrickToCollide;
+
+		for (int i = 0; i < nBricks; i++)
+		{
+			if (bricks[i].CheckBallCollision(ball))
 			{
-				float newDistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
-				if (newDistFromBallCenterToBrickCenterSq < DistFromBallCenterToBrickCenterSq)
+				if (collisionHappend)
 				{
-					DistFromBallCenterToBrickCenterSq = newDistFromBallCenterToBrickCenterSq;
+					float newDistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
+					if (newDistFromBallCenterToBrickCenterSq < DistFromBallCenterToBrickCenterSq)
+					{
+						DistFromBallCenterToBrickCenterSq = newDistFromBallCenterToBrickCenterSq;
+						curIndexOfBrickToCollide = i;
+					}
+				}
+				else
+				{
+					DistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
 					curIndexOfBrickToCollide = i;
+					collisionHappend = true;
 				}
 			}
-			else
-			{
-				DistFromBallCenterToBrickCenterSq = (bricks[i].GetBrickCenter() - ball.GetBallCenter()).GetLengthSq();
-				curIndexOfBrickToCollide = i;
-				collisionHappend = true;
-			}
 		}
-	}
 
-	if (collisionHappend)
-	{
-		pad.ResetCoolDown();
-		bricks[curIndexOfBrickToCollide].ExecuteBallCollision(ball);
-		soundBrick.Play();
+		if (collisionHappend)
+		{
+			pad.ResetCoolDown();
+			bricks[curIndexOfBrickToCollide].ExecuteBallCollision(ball);
+			soundBrick.Play();
+		}
+
 	}
 }
 
+
 void Game::ComposeFrame()
 {
-	ball.Draw(gfx);
-	pad.Draw(gfx);
+	//gfx.DrawRect(gameBoundry, Colors::Blue);
+	SpriteCodex::DrawBackground(int(gameBoundry.left), int(gameBoundry.top), gfx);
 	for (Brick& b : bricks)
 	{
 		b.Draw(gfx);
 	}
-	gfx.DrawRect(wallLeft, Colors::LightGray);
-	gfx.DrawRect(wallRight, Colors::LightGray);
-	gfx.DrawRect(wallTop, Colors::LightGray);
+	gfx.DrawRect(wallLeft, Colors::MakeRGB(128,253,234));
+	gfx.DrawRect(wallRight, Colors::MakeRGB(16, 252, 217));
+	gfx.DrawRect(wallTop, Colors::MakeRGB(6, 253, 224));
+	gfx.DrawRect(wallBottom, Colors::Red);
+	if (!ball.GetGameStatus())
+	{
+		ball.Draw(gfx);
+		pad.Draw(gfx);
+	}
+	else
+	{
+		SpriteCodex::DrawGameOver(Vec2(400.0f, 375.0f), gfx);
+	}
+	
+	
 }

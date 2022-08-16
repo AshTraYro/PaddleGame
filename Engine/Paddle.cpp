@@ -53,7 +53,7 @@ bool Paddle::DoBallCollission(Ball& ball)
 
 				if (ball.GetBallCenter().x == pos.x)
 				{
-					ball.UpdateVelocityX(0);
+					ball.UpdateVelocityX(1);
 					ball.UpdateVelocityY(-ballVelocityValue);
 				}
 				else

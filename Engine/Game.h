@@ -53,11 +53,14 @@ private:
 	RectF wallLeft;
 	RectF wallRight;
 	RectF wallTop;
-	static constexpr int nBrickColumns = 18;
+	RectF wallBottom;
+	RectF background;
+	bool isNotGameOver = true;
+	static constexpr int nBrickColumns = 10;
 	static constexpr int nBrickRows = 4;
 	static constexpr int nBricks = nBrickColumns * nBrickRows;
-	static constexpr float brickWidth = 40.0f;
-	static constexpr float brickHeight = 24.0f;
+	static constexpr float brickWidth = 60.0f;
+	static constexpr float brickHeight = 30.0f;
 	Ball ball;
 	FrameTimer ft;
 	RectF gameBoundry;

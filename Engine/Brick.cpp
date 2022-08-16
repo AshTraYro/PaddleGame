@@ -37,10 +37,30 @@ void Brick::ExecuteBallCollision(Ball& ball)
 		{
 			ball.ReboundX();
 		}
-		destroyed = true;
+		if (brickHitCount == 0)
+		{
+			destroyed = true;
+		}
+		brickHitCount++;
 }
 
 Vec2 Brick::GetBrickCenter()
 {
 	return rect.GetRectCenter();
 }
+
+int Brick::GetBrickHitCounts()
+{
+	return brickHitCount;
+}
+
+bool Brick::GetBrickStatus()
+{
+	return destroyed;
+}
+
+void Brick::UpdateBrickStatus(bool new_status)
+{
+	destroyed = new_status;
+}
+

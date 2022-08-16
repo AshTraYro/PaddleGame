@@ -44,8 +44,8 @@ bool Ball::DoWallCollission(const RectF& wall)
 	else if (rect.bottom > wall.bottom)
 	{
 		pos.y -= rect.bottom - wall.bottom;
-		ReboundY();
 		collided = true;
+		isGameOver = true;
 	}
 
 	return collided;
@@ -89,4 +89,9 @@ void Ball::UpdateVelocityX(float vel_x)
 void Ball::UpdateVelocityY(float vel_y)
 {
 	vel.y = vel_y;
+}
+
+bool Ball::GetGameStatus()
+{
+	return isGameOver;
 }
