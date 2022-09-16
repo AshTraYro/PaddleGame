@@ -7,7 +7,7 @@ Beveler::Beveler(Color baseColor)
 
 void Beveler::SetBaseColor(Color color_in)
 {
-	color_in = baseColor;
+	baseColor = color_in;
 	topColor = Color(
 		int(float(baseColor.GetR()) * topFactor), 
 		int(float(baseColor.GetG()) * topFactor), 
@@ -41,8 +41,8 @@ void Beveler::DrawOuterBevel(const RectF& rect, int size, Graphics& gfx)
 
 	//left side of the Bevler
 	gfx.DrawIsoRightTriBL(left, top, size, leftColor);
-	gfx.DrawRect(left, top + size, right, bottom - size, leftColor);
-	gfx.DrawIsoRightTriUL(left, top, size, leftColor);
+	gfx.DrawRect(left, top + size, left + size, bottom - size, leftColor);
+	gfx.DrawIsoRightTriUL(left, bottom-size, size, leftColor);
 	//top side of the Bevler
 	gfx.DrawIsoRightTriUR(left, top, size, topColor);
 	gfx.DrawRect(left + size, top, right - size, top + size, topColor);

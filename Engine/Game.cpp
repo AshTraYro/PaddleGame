@@ -34,7 +34,6 @@ Game::Game( MainWindow& wnd )
 
 
 {
-	Color bricksColor[nBrickRows] = { Colors::Red,Colors::Green,Colors::Yellow,Colors::Magenta};
 	Vec2 topLeft = Vec2(100.0f, 100.0f);
 	int i = 0;
 	for (int y = 0; y < nBrickRows; y++)

@@ -4,14 +4,17 @@
 #include "Graphics.h"
 #include "Colors.h"
 #include "Ball.h"
+#include "Beveler.h"
 
 class Brick {
 private:
 	RectF rect;
-	Color color;
 	bool destroyed = false;
 	int brickHitCount = 0;
 	static constexpr float brickPadding = 1.0f;
+	static constexpr int bevelBrickSize = 5;
+	//Color c;
+	Beveler bev;
 public:
 	Brick() = default;
 	Brick(RectF& rect_in, Color color_in);
