@@ -7,8 +7,8 @@
 class Beveler
 {
 public:
-	Beveler(Color baseColor);
 	Beveler() = default;
+	Beveler(Color baseColor);
 	void SetBaseColor(Color color_in);
 	void DrawInnerBevel(const RectF& rect, int size, Graphics& gfx);
 	void DrawOuterBevel(const RectF& rect, int size, Graphics& gfx);

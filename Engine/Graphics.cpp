@@ -394,7 +394,7 @@ void Graphics::DrawIsoRightTriBR(int x, int y, int size, Color c)
 	for (int loop_y = y; loop_y < y + size; loop_y++)
 	{
 		int line_length = loop_y - y;
-		for (int loop_x = x - size + line_length; loop_x < x + size; loop_x++)
+		for (int loop_x = x + size - line_length; loop_x < x + size; loop_x++)
 		{
 			PutPixel(loop_x, loop_y, c);
 		}

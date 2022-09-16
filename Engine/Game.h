@@ -49,7 +49,7 @@ private:
 	/*  User Variables              */
 	static constexpr float wallThickness = 20;
 	static constexpr float wallPadding = 10;
-
+	
 	RectF wallLeft;
 	RectF wallRight;
 	RectF wallTop;
@@ -61,6 +61,7 @@ private:
 	static constexpr int nBricks = nBrickColumns * nBrickRows;
 	static constexpr float brickWidth = 60.0f;
 	static constexpr float brickHeight = 30.0f;
+	Color bricksColor[nBrickRows] = { {230,0,0},{0,230,0},{230,230,0},{230,0,230} };
 	Ball ball;
 	FrameTimer ft;
 	RectF gameBoundry;

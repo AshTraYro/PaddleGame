@@ -27,14 +27,13 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	ball(Vec2(400.0f,300.0f), Vec2(-300.0f, -300.0f)),
-	gameBoundry(70.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding-70.0f,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight)),
+	gameBoundry(70.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding-70.0f,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight-5)),
 	pad(Vec2(400.0f,550),70.0f,15.0f),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav")
 
 
 {
-	Color bricksColor[nBrickRows] = { Colors::Red,Colors::Green,Colors::Yellow,Colors::Magenta};
 	Vec2 topLeft = Vec2(100.0f, 100.0f);
 	int i = 0;
 	for (int y = 0; y < nBrickRows; y++)
