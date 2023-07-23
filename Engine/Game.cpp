@@ -26,8 +26,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(400.0f,300.0f), Vec2(-300.0f, -300.0f)),
 	gameBoundry(70.0f+wallThickness+wallPadding,float(gfx.ScreenWidth)-wallThickness-wallPadding-70.0f,0.0f+wallThickness+wallPadding,float(gfx.ScreenHeight-5)),
+	ball(Vec2(400.0f, 300.0f), Vec2(-300.0f, -300.0f)),
 	pad(Vec2(400.0f,550),70.0f,15.0f),
 	soundPad(L"Sounds\\arkpad.wav"),
 	soundBrick(L"Sounds\\arkbrick.wav")
@@ -69,11 +69,15 @@ void Game::Go()
 	gfx.EndFrame();
 }
 
+void Game::ResetBall()
+{
+	ball = Ball(Vec2(400.0f, 300.0f), Vec2(-300.0f, -300.0f));
+}
+
 void Game::UpdateModel(float dt)
 {
 	if (isNotGameOver)
 	{
-
 		ball.Update(dt);
 		pad.Update(wnd.kbd, dt);
 		pad.DoWallCollission(gameBoundry);
@@ -124,11 +128,10 @@ void Game::UpdateModel(float dt)
 	}
 }
 
-
 void Game::ComposeFrame()
 {
-	//gfx.DrawRect(gameBoundry, Colors::Blue);
-	SpriteCodex::DrawBackground(int(gameBoundry.left), int(gameBoundry.top), gfx);
+	gfx.DrawRect(gameBoundry, Colors::Blue);
+	//SpriteCodex::DrawBackground(int(gameBoundry.left), int(gameBoundry.top), gfx);
 	for (Brick& b : bricks)
 	{
 		b.Draw(gfx);

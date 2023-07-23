@@ -41,6 +41,7 @@ private:
 	void UpdateModel(float dt);
 	/********************************/
 	/*  User Functions              */
+	void ResetBall();
 	/********************************/
 private:
 	MainWindow& wnd;
